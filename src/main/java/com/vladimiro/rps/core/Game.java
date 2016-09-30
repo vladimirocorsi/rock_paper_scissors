@@ -1,4 +1,6 @@
-package com.vladimiro.rps;
+package com.vladimiro.rps.core;
+
+import static java.util.Objects.requireNonNull;
 
 public class Game {
 	
@@ -9,8 +11,8 @@ public class Game {
 	private int score2;
 	
 	public Game(Player p1, Player p2){
-		this.player1 = p1;
-		this.player2 = p2;
+		this.player1 = requireNonNull(p1);
+		this.player2 = requireNonNull(p2);
 		comparator = new SymbolComparator();
 	}
 	
@@ -25,7 +27,11 @@ public class Game {
 		else if(comparator.compare(symbol1, symbol2) < 0){
 			score2++;
 		}
-		//else tie game: do nothing
+		else{
+			//tie
+			score1++;
+			score2++;
+		}
 		
 		//notify symbol
 		player1.notifyOpponentSymbol(symbol2);
