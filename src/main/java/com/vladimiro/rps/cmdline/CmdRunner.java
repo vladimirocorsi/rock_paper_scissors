@@ -3,7 +3,6 @@ package com.vladimiro.rps.cmdline;
 import java.util.Scanner;
 
 import com.vladimiro.rps.core.ComputerPlayer;
-import com.vladimiro.rps.core.ComputerStrategy;
 import com.vladimiro.rps.core.ComputerStrategyFactory;
 import com.vladimiro.rps.core.Game;
 import com.vladimiro.rps.core.HumanPlayer;
@@ -16,8 +15,9 @@ import com.vladimiro.rps.core.Symbol;
  * @author vcorsi
  *
  */
-public class CmdRunner {
+public class CmdRunner implements Runnable {
 	
+	@Override
 	public void run() {
 		String playersType = null;
 		final Scanner scanner = new Scanner(System.in);
@@ -27,15 +27,13 @@ public class CmdRunner {
 				playersType = scanner.nextLine();
 			}
 
-			final ComputerStrategy strategy = ComputerStrategyFactory.randomStrategy();
-
-			final Player player1 = new ComputerPlayer(strategy);
+			final Player player1 = new ComputerPlayer(ComputerStrategyFactory.randomStrategy(), "Computer");
 			final Player player2;
 
 			if (playersType.equalsIgnoreCase("P")) {
 				player2 = new HumanPlayer(new CommandLineSymbolSource());
 			} else {
-				player2 = new ComputerPlayer(strategy);
+				player2 = new ComputerPlayer(ComputerStrategyFactory.randomStrategy(), "Computer 2");
 			}
 
 			final Game game = new Game(player1, player2);

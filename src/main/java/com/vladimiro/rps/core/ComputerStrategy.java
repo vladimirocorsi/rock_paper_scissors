@@ -3,7 +3,7 @@ package com.vladimiro.rps.core;
 /**
  * A strategy for generating symbols for an {@link ComputerPlayer}.
  * It may be fed with symbols previously played by the opponent.
- * This symbols may be used for influencing the generation strategy.
+ * These symbols may be used for influencing the generation strategy.
  * 
  * @author vcorsi
  *
