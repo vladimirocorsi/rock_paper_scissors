@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,17 +19,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
+import javax.swing.border.EmptyBorder;
 
 /**
- * Instantiates and assembles the Swing components making the GUI.
- * Handles the calls to {@link GameController} and updates the GUI according to
- * results.
+ * Instantiates and assembles the Swing components making the GUI. Handles the
+ * calls to {@link GameController} and updates the GUI according to results.
  * 
  * @author vladimiro
  *
  */
 public class SwingRunner implements Runnable {
 	
+	private final static Logger LOGGER = Logger.getLogger(SwingRunner.class.getName());
+
 	private static final String COMPUTER = "computer";
 	private static final String HUMAN = "human";
 	private JPanel cards;
@@ -46,28 +50,29 @@ public class SwingRunner implements Runnable {
 	private JButton playRockButton;
 	private JButton playPaperButton;
 	private JButton playScissorsButton;
-	
+	private boolean actionDisabled;
+
 	@Override
-	public void run() {	
+	public void run() {
 		gameController = new GameController();
-		 //Create and set up the window.
-        JFrame frame = new JFrame("Rock Paper Scissors!");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setJMenuBar(createMenuBar());
-        
-        final Container contentPane = frame.getContentPane();
-        JPanel verticalPanel = new JPanel();
-        verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
-        verticalPanel.add(getCards());
-        verticalPanel.add(getScorePanel());
-        contentPane.add(verticalPanel, BorderLayout.CENTER);
-        
-        //Display the window.
-        //frame.pack();
-        frame.setSize(400, 200);
-        frame.setVisible(true);
+		// Create and set up the window.
+		JFrame frame = new JFrame("Rock Paper Scissors!");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setJMenuBar(createMenuBar());
+
+		final Container contentPane = frame.getContentPane();
+		JPanel verticalPanel = new JPanel();
+		verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
+		verticalPanel.add(getCards());
+		verticalPanel.add(getScorePanel());
+		contentPane.add(verticalPanel, BorderLayout.CENTER);
+
+		// Display the window.
+		// frame.pack();
+		frame.setSize(400, 200);
+		frame.setVisible(true);
 	}
-	
+
 	private JMenuBar createMenuBar() {
 		if (menubar == null) {
 			menubar = new JMenuBar();
@@ -77,8 +82,11 @@ public class SwingRunner implements Runnable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if(isActionsDisabled()){
+						return;
+					}
 					// disable actions
-					setActionsEnabled(false);
+					setActionsDisabled(true);
 					// Create new human vs computer game
 					new SwingWorker() {
 
@@ -93,7 +101,7 @@ public class SwingRunner implements Runnable {
 							resetUI();
 							CardLayout cl = (CardLayout) (getCards().getLayout());
 							cl.show(getCards(), HUMAN);
-							setActionsEnabled(true);
+							setActionsDisabled(false);
 						};
 
 					}.execute();
@@ -104,8 +112,11 @@ public class SwingRunner implements Runnable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if(isActionsDisabled()){
+						return;
+					}
 					// disable actions
-					setActionsEnabled(false);
+					setActionsDisabled(true);
 					// Create new computer game
 					new SwingWorker() {
 
@@ -120,7 +131,7 @@ public class SwingRunner implements Runnable {
 							resetUI();
 							CardLayout cl = (CardLayout) (getCards().getLayout());
 							cl.show(getCards(), COMPUTER);
-							setActionsEnabled(true);
+							setActionsDisabled(false);
 						};
 
 					}.execute();
@@ -133,8 +144,8 @@ public class SwingRunner implements Runnable {
 		}
 		return menubar;
 	}
-	
-	private JPanel getCards(){
+
+	private JPanel getCards() {
 		if (cards == null) {
 			cards = new JPanel(new CardLayout());
 			cards.add("empty", new JPanel());
@@ -145,42 +156,52 @@ public class SwingRunner implements Runnable {
 	}
 
 	private JPanel getHumanPanel() {
-		if(humanPanel == null){
+		if (humanPanel == null) {
 			humanPanel = new JPanel();
 			JPanel horizontalPanel = new JPanel();
 			playRockButton = new JButton("Play rock");
 			playRockButton.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					setActionsEnabled(false);
+					if(isActionsDisabled()){
+						return;
+					}
+					setActionsDisabled(true);
 					new PlaySwingSworker(v -> gameController.playRock()).execute();
 				}
 			});
 			horizontalPanel.add(playRockButton);
-			
+
 			playPaperButton = new JButton("Play paper");
 			playPaperButton.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					setActionsEnabled(false);
+					if(isActionsDisabled()){
+						return;
+					}
+					setActionsDisabled(true);
 					new PlaySwingSworker(v -> gameController.playPaper()).execute();
 				}
+
 			});
 			horizontalPanel.add(playPaperButton);
-			
+
 			playScissorsButton = new JButton("Play scissors");
 			playScissorsButton.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					setActionsEnabled(false);
+					if(isActionsDisabled()){
+						return;
+					}
+					setActionsDisabled(true);
 					new PlaySwingSworker(v -> gameController.playScissors()).execute();
 				}
 			});
 			horizontalPanel.add(playScissorsButton);
-			
+
 			humanPanel.add(horizontalPanel);
 		}
 		return humanPanel;
@@ -194,7 +215,10 @@ public class SwingRunner implements Runnable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					setActionsEnabled(false);
+					if(isActionsDisabled()){
+						return;
+					}
+					setActionsDisabled(true);
 					new PlaySwingSworker(v -> gameController.playComputer()).execute();
 				}
 			});
@@ -207,13 +231,14 @@ public class SwingRunner implements Runnable {
 		if (scorePanel == null) {
 			scorePanel = new JPanel();
 			scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
-			
+
 			played1Label = new JLabel();
 			played2Label = new JLabel();
 			scorePanel.add(played1Label);
 			scorePanel.add(played2Label);
 			
 			score1 = new JLabel();
+			score1.setBorder(new EmptyBorder(10, 00, 0, 0));
 			score2 = new JLabel();
 			scorePanel.add(score1);
 			scorePanel.add(score2);
@@ -227,21 +252,20 @@ public class SwingRunner implements Runnable {
 		played1Label.setText("");
 		played2Label.setText("");
 	}
-	
-	private void setActionsEnabled(boolean b) {
-		computerMenuItem.setEnabled(b);
-		humanMenuItem.setEnabled(b);
-		playButton.setEnabled(b);
-		playPaperButton.setEnabled(b);
-		playRockButton.setEnabled(b);
-		playScissorsButton.setEnabled(b);
+
+	private void setActionsDisabled(boolean b) {
+		actionDisabled = b;
 	}
 	
+	private boolean isActionsDisabled() {
+		return actionDisabled;
+	}
+
 	class PlaySwingSworker extends SwingWorker<PlayResultDto, Object> {
-		
+
 		private Function<Void, PlayResultDto> function;
 
-		PlaySwingSworker(Function<Void, PlayResultDto> doInBackGround){
+		PlaySwingSworker(Function<Void, PlayResultDto> doInBackGround) {
 			this.function = doInBackGround;
 		}
 
@@ -249,24 +273,22 @@ public class SwingRunner implements Runnable {
 		protected PlayResultDto doInBackground() throws Exception {
 			return function.apply(null);
 		}
-		
+
 		protected void done() {
 			PlayResultDto playResultDto;
 			try {
 				playResultDto = get();
 			} catch (InterruptedException | ExecutionException e) {
-				// TODO log and handle errors
+				LOGGER.log(Level.SEVERE, "Error getting symbol", e);
 				throw new RuntimeException(e);
 			}
-			played1Label.setText(playResultDto.getLabelPlayer1() + " played "
-					+ playResultDto.getPlayedSymbol1().getLabel());
-			played2Label.setText(playResultDto.getLabelPlayer2() + " played "
-					+ playResultDto.getPlayedSymbol2().getLabel());
-			score1.setText("Score " + playResultDto.getLabelPlayer1() + ": "
-					+ playResultDto.getScorePlayer1());
-			score2.setText("Score " + playResultDto.getLabelPlayer2() + ": "
-					+ playResultDto.getScorePlayer2());
-			setActionsEnabled(true);
+			played1Label.setText(
+					playResultDto.getLabelPlayer1() + " played " + playResultDto.getPlayedSymbol1().getLabel());
+			played2Label.setText(
+					playResultDto.getLabelPlayer2() + " played " + playResultDto.getPlayedSymbol2().getLabel());
+			score1.setText("Score " + playResultDto.getLabelPlayer1() + ": " + playResultDto.getScorePlayer1());
+			score2.setText("Score " + playResultDto.getLabelPlayer2() + ": " + playResultDto.getScorePlayer2());
+			setActionsDisabled(false);
 		};
 
 	}

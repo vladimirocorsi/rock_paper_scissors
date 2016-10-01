@@ -16,6 +16,7 @@ public class ComputerPlayerTest {
 	
 	@Mock
 	private ComputerStrategy strategy;
+	
 	private ComputerPlayer player;
 	
 	@Before

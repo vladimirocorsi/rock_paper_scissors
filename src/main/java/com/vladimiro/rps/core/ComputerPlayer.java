@@ -3,17 +3,18 @@ package com.vladimiro.rps.core;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A {@link Player} who generates symbols automatically based on a {@link ComputerStrategy}.
+ * A {@link Player} who generates symbols automatically based on a
+ * {@link ComputerStrategy}.
  * 
  * @author vcorsi
  *
  */
 public class ComputerPlayer implements Player {
-	
+
 	private final ComputerStrategy strategy;
 	private final String label;
 
-	public ComputerPlayer(ComputerStrategy strategy, String name){
+	public ComputerPlayer(ComputerStrategy strategy, String name) {
 		this.strategy = requireNonNull(strategy);
 		this.label = name;
 	}

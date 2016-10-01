@@ -25,11 +25,9 @@ class CommandLineSymbolSource implements SymbolSource {
 		while (symbol == null) {
 			printQuestion();
 			final String inputSymbol = scanner.nextLine();
-			final Optional<Symbol> foundSymbol = symbols.stream()
-					.filter(s -> {	
-						return s.getShort().equalsIgnoreCase(inputSymbol);
-					})
-					.findFirst();
+			final Optional<Symbol> foundSymbol = symbols.stream().filter(s -> {
+				return s.getShort().equalsIgnoreCase(inputSymbol);
+			}).findFirst();
 			symbol = foundSymbol.orElse(null);
 		}
 		return symbol;

@@ -9,11 +9,11 @@ import java.util.Random;
  *
  */
 class RandomStrategy implements ComputerStrategy {
-	
-	private Random random;
-	private Symbol[] symbols;
 
-	public RandomStrategy(){
+	private final Random random;
+	private final Symbol[] symbols;
+
+	public RandomStrategy() {
 		this.random = new Random();
 		this.symbols = Symbol.values();
 	}
@@ -25,7 +25,7 @@ class RandomStrategy implements ComputerStrategy {
 
 	@Override
 	public void addOpponentSymbol(Symbol symbol) {
-		//do nothing
+		// do nothing
 	}
 
 }
