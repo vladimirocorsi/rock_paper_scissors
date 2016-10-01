@@ -1,6 +1,7 @@
 package com.vladimiro.rps.gui;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.vladimiro.rps.core.ComputerPlayer;
@@ -46,8 +47,10 @@ class GameController {
 	private Game game;
 	private Player player2;
 	private Player player1;
-	private Symbol humanSymbol;
+	//humanSymbol can be written and read by different threads
+	private volatile Symbol humanSymbol;
 	private ControllerStatus status;
+	private final ExecutorService executor = Executors.newCachedThreadPool();
 
 	/**
 	 * Start a computer vs computer game.
@@ -55,8 +58,7 @@ class GameController {
 	public void startComputerGame() {
 		this.player1 = new ComputerPlayer(ComputerStrategyFactory.randomStrategy(), "Computer 1");
 		this.player2 = new ComputerPlayer(ComputerStrategyFactory.randomStrategy(), "Computer 2");
-		//TODO magic number
-		this.game = new Game(player1, player2, Executors.newFixedThreadPool(4));
+		this.game = new Game(player1, player2, executor);
 		status = ControllerStatus.COMPUTER_GAME;
 	}
 

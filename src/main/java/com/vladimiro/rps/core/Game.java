@@ -19,7 +19,8 @@ public class Game {
 	private final ExecutorService executor;
 
 	/**
-	 * A game with two players.
+	 * A game with two players. This class is not thread-safe: methods are
+	 * designed to be called sequentially.
 	 * 
 	 * @param player1
 	 * @param player2
