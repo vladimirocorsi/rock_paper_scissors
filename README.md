@@ -8,7 +8,7 @@ Available in GUI and command line modes.
 BUILD
 - Requirements: Maven 3, JDK 1.8.
 - 'mvn clean package' to build 'rps.jar'.
-- 'mvn clean site' to generate Maven site with Checkstyle and Cobertura reports.
+- 'mvn clean site' to generate Maven site with Checkstyle, Cobertura and FindBugs reports.
 
 USAGE
 - Requirements: JRE 1.8.
