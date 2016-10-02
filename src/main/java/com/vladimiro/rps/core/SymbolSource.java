@@ -8,6 +8,6 @@ package com.vladimiro.rps.core;
  */
 public interface SymbolSource {
 
-	Symbol readSymbol();
+  Symbol readSymbol();
 
 }

@@ -16,28 +16,28 @@ import com.vladimiro.rps.core.SymbolSource;
  */
 class CommandLineSymbolSource implements SymbolSource {
 
-	private final List<Symbol> symbols = Arrays.asList(Symbol.values());
+  private final List<Symbol> symbols = Arrays.asList(Symbol.values());
 
-	@Override
-	public Symbol readSymbol() {
-		Symbol symbol = null;
-		final Scanner scanner = new Scanner(System.in);
-		while (symbol == null) {
-			printQuestion();
-			final String inputSymbol = scanner.nextLine();
-			final Optional<Symbol> foundSymbol = symbols.stream().filter(s -> {
-				return s.getShort().equalsIgnoreCase(inputSymbol);
-			}).findFirst();
-			symbol = foundSymbol.orElse(null);
-		}
-		return symbol;
-	}
+  @Override
+  public Symbol readSymbol() {
+    Symbol symbol = null;
+    final Scanner scanner = new Scanner(System.in);
+    while (symbol == null) {
+      printQuestion();
+      final String inputSymbol = scanner.nextLine();
+      final Optional<Symbol> foundSymbol = symbols.stream().filter(s -> {
+        return s.getShort().equalsIgnoreCase(inputSymbol);
+      }).findFirst();
+      symbol = foundSymbol.orElse(null);
+    }
+    return symbol;
+  }
 
-	private void printQuestion() {
-		System.out.println("Choose a symbol to play:");
-		for (Symbol s : symbols) {
-			System.out.println(s.getShort() + " for " + s.getLabel());
-		}
-	}
+  private void printQuestion() {
+    System.out.println("Choose a symbol to play:");
+    for (Symbol s : symbols) {
+      System.out.println(s.getShort() + " for " + s.getLabel());
+    }
+  }
 
 }

@@ -10,22 +10,22 @@ import java.util.Random;
  */
 class RandomStrategy implements ComputerStrategy {
 
-	private final Random random;
-	private final Symbol[] symbols;
+  private final Random random;
+  private final Symbol[] symbols;
 
-	public RandomStrategy() {
-		this.random = new Random();
-		this.symbols = Symbol.values();
-	}
+  public RandomStrategy() {
+    this.random = new Random();
+    this.symbols = Symbol.values();
+  }
 
-	@Override
-	public Symbol generateSymbol() {
-		return symbols[random.nextInt(symbols.length)];
-	}
+  @Override
+  public Symbol generateSymbol() {
+    return symbols[random.nextInt(symbols.length)];
+  }
 
-	@Override
-	public void addOpponentSymbol(Symbol symbol) {
-		// do nothing
-	}
+  @Override
+  public void addOpponentSymbol(Symbol symbol) {
+    // do nothing
+  }
 
 }
