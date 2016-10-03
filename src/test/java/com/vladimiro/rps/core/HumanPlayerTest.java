@@ -24,9 +24,9 @@ public class HumanPlayerTest {
 
   @Test
   public void test_readSymbol() {
-    when(source.readSymbol()).thenReturn(Symbol.ROCK);
+    when(source.read()).thenReturn(Symbol.ROCK);
     assertEquals(Symbol.ROCK, player.askForSymbol());
-    verify(source).readSymbol();
+    verify(source).read();
   }
 
 }

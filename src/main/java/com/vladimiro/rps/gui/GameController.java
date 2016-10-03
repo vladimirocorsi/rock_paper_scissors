@@ -1,6 +1,5 @@
 package com.vladimiro.rps.gui;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -10,7 +9,6 @@ import com.vladimiro.rps.core.Game;
 import com.vladimiro.rps.core.HumanPlayer;
 import com.vladimiro.rps.core.Player;
 import com.vladimiro.rps.core.Symbol;
-import com.vladimiro.rps.core.SymbolSource;
 
 /**
  * A controller allowing to create human vs computer and computer vs computer games. Once a game
@@ -24,23 +22,6 @@ class GameController {
 
   enum ControllerStatus {
     COMPUTER_GAME, HUMAN_GAME;
-  }
-
-  /**
-   * A {@link SymbolSource} reading symbols from a {@link BlockingQueue}. The {@link GameController}
-   * is designed to handle one play method call at a time. With this assumption adding and removing
-   * a given symbol in the queue is done during the time of such a method call.
-   * 
-   * @author vladimiro
-   *
-   */
-  class ControllerSource implements SymbolSource {
-
-    @Override
-    public Symbol readSymbol() {
-      return humanSymbol;
-    }
-
   }
 
   private Game game;
@@ -65,7 +46,8 @@ class GameController {
    * Start a human vs computer game.
    */
   public void startHumanGame() {
-    this.player1 = new HumanPlayer(new ControllerSource());
+    //the SymbolSource just returns the value of humanSymbol which is written in the playXXX methods
+    this.player1 = new HumanPlayer(() -> humanSymbol);
     this.player2 = new ComputerPlayer(ComputerStrategyFactory.randomStrategy(), "Computer");
     this.game = new Game(player1, player2);
     status = ControllerStatus.HUMAN_GAME;

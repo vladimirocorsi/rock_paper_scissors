@@ -19,7 +19,7 @@ class CommandLineSymbolSource implements SymbolSource {
   private final List<Symbol> symbols = Arrays.asList(Symbol.values());
 
   @Override
-  public Symbol readSymbol() {
+  public Symbol read() {
     Symbol symbol = null;
     final Scanner scanner = new Scanner(System.in);
     while (symbol == null) {

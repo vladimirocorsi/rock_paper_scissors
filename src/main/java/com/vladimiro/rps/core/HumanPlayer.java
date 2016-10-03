@@ -18,7 +18,7 @@ public class HumanPlayer implements Player {
 
   @Override
   public Symbol askForSymbol() {
-    return source.readSymbol();
+    return source.read();
   }
 
   @Override

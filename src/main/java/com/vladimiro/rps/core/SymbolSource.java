@@ -6,8 +6,9 @@ package com.vladimiro.rps.core;
  * @author vcorsi
  *
  */
+@FunctionalInterface
 public interface SymbolSource {
 
-  Symbol readSymbol();
+  Symbol read();
 
 }
